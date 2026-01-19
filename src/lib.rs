@@ -199,7 +199,7 @@ fn make_group_x_qualifier(
 }
 
 fn accept_resource(name: &str, resource_filter: &[String]) -> bool {
-    resource_filter.is_empty() || resource_filter.iter().any(|x| name.contains(x))
+    resource_filter.is_empty() || resource_filter.iter().any(|x| name.ends_with(x))
 }
 
 #[instrument(skip(client, resources))]
@@ -1000,7 +1000,7 @@ mod tests {
     #[test]
     fn test_accept_resource() {
         assert!(accept_resource("cpu", &[]));
-        assert!(accept_resource("cpu", &["c".to_string()]));
+        assert!(!accept_resource("cpu", &["c".to_string()]));
         assert!(accept_resource("cpu", &["cpu".to_string()]));
         assert!(!accept_resource("cpu", &["cpu3".to_string()]));
         assert!(accept_resource("gpu", &["gpu".to_string()]));
